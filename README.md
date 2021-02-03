@@ -1,9 +1,8 @@
 # TS-Files-Downloader
 Download multiple .ts files from URL's
 
-########################
-GET THE LINKS FILE
-########################
+  GET THE LINKS FILE
+______________________
 1. Open page source of  the video ( Ctrl + U )
 2. Search for "video-js" with the video-watch ID
 3. Choose the URL for a specific quality (ie. 1080p)
