@@ -2,7 +2,7 @@
 Download multiple .ts files from URL's
 
 ###############################################
-OBTAIN THE LINKS FILE
+GET THE LINKS FILE
 ###############################################
 1. Open page source of  the video ( Ctrl + U )
 2. Search for "video-js" with the video-watch ID
@@ -36,3 +36,8 @@ FUTURE UPGRADES
 - Skip the already downloaded video files in case of a program crash
 - Delete merged video if the program crashes while merging it
 - Create GUI program based on the same code
+
+###############################################
+NOTE
+###############################################
+This python script was created to download .ts files from Dark.Video
