@@ -1,6 +1,10 @@
 # TS-Files-Downloader
 Download multiple .ts files from URL's
 ______________________
+IMPLEMENTED UPGRADES:
+
+- Input Video URL and display available resolutions (download only selected resolution)
+______________________
 GET THE LINKS FILE:
 
 1. Open page source of  the video ( Ctrl + U )
