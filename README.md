@@ -34,4 +34,4 @@ FUTURE UPGRADES:
 ______________________
 NOTES:
 
--This python script was created to download .ts files from Dark.Video
+- This python script was created to download .ts files from Dark.Video
