@@ -8,7 +8,7 @@ import os
 # High-level operations on files
 from shutil import copyfile as cpFile
 # Library to use time.sleep
-import time
+import time as timeLib
 # Library to import csv files
 import csv
 # Collection of complex mathematical operations suitable for processing statistical data
@@ -19,32 +19,176 @@ from natsort import natsorted
 # Libraries to open file pick dialog
 import tkinter as tk
 from tkinter import filedialog
+# Library to exit a script
+import sys
+# Library to generate timestamps to video file name
+from datetime import datetime
 
-print ("-----TS Files Downloader (Console version)-----\n")
-
-#############################
-# PICK TS FILE
-#############################
-root = tk.Tk()
-root.withdraw()
-file_path = filedialog.askopenfilename() # Get the file path with the file dialog
-filePathComponents = file_path.split('/', -1) # Split the file path by delimiter
-tsFileName = filePathComponents[-1] # Select the part that corresponds to the file name
-print('Links file selected!\n')
+print ("-----TS Files Downloader (Console version)-----")
 
 #############################
-# MAIN
+# INITIAZATION
 #############################
 mainDirectory = os.path.dirname(os.path.realpath(__file__)) # Get current working directory
 os.chdir(os.path.dirname(os.path.realpath(__file__))) # Set current working directory
 
+#############################
+# AUXILIARY FUNCTIONS
+#############################
+def showMenu():
+    print ("\nSelect an option:")
+    print ("1) Video URL (only works for Dark.Video)")
+    print ("2) Select a file")
+    print ("3) Exit")
+    data=int(input("Enter your choice: "))
+    return data
+
+def showDownloadOptions():
+    print ("\nSelect the video quality you want to download:")
+    print ("1) 240p")
+    print ("2) 320p")
+    print ("3) 480p")
+    print ("4) 720p")
+    print ("5) 1080p")
+    data=int(input("Enter your choice: "))
+    return data
+
+#############################
+# INPUT METHOD SELECTION
+#############################
+selectedOption = showMenu()
+keepCycleAlive = True
+while keepCycleAlive:
+    if selectedOption == 1:
+        keepCycleAlive = False
+        videoUrl = str(input("Paste your URL here: "))
+    elif selectedOption == 2:
+        keepCycleAlive = False
+        print("\nOpening file dialog...")
+    elif selectedOption == 3:
+        keepCycleAlive = False
+        print("\nExiting...")
+        sys.exit(0)
+    else:
+        print("\nUnavaiable option. Try again!")
+        selectedOption=showMenu()
+
+#############################
+# PASTE URL OF VIDEO
+#############################
+if selectedOption == 1:
+    urlSourceCode = requests.get(videoUrl) # Request source code of URL
+    urlSourceCodeText = urlSourceCode.text # Extract the text of the source code
+    sources = urlSourceCodeText.split('<source src=') # Split the source code to seperate the links from the rest
+    sourcesArray = np.asarray(sources, dtype=None) # Returns an array that contains all the elements of the list
+    sourcesArray = np.delete(sourcesArray, 0) # Delete first element of array (text before the links)
+    sourcesArrayModified = sourcesArray # Make copy of array
+
+    # Delete every char before https and after the end of the link
+    for arrayIndex, indexContent in enumerate(sourcesArray):
+        str = indexContent
+        index = str.find('https') # Stores the index of a substring or char
+        str = str[index:] # Discards whatever is before https
+        index = str.find('type') # Stores the index of a substring or char
+        str = str[:index-2] # Discards whatever is after the end of the link
+        sourcesArrayModified[arrayIndex] = str # Saves the clean URL string to an array
+        
+    sourcesArray = sourcesArrayModified # Update original array
+    # Delete unwanted variables
+    del urlSourceCode, urlSourceCodeText, sources, sourcesArrayModified, arrayIndex, indexContent, str, index
+
+    ###############################################
+    # ALLOW THE USER TO CHOOSE VIDEO QUALITY
+    ###############################################
+    selectedOptionQuality = showDownloadOptions()
+    keepCycleAlive = True
+    videoQualityUrl = ''
+    while keepCycleAlive:
+        if selectedOptionQuality == 1:
+            try:
+                videoQualityUrl =  sourcesArray[0]
+                keepCycleAlive = False
+            except:
+                print("\nQuality unavailable! Try another one!")
+                keepCycleAlive = True
+        elif selectedOptionQuality == 2:
+            try:
+                videoQualityUrl =  sourcesArray[1]
+                keepCycleAlive = False
+            except:
+                print("\nQuality unavailable! Try another one!")
+                keepCycleAlive = True
+        elif selectedOptionQuality == 3:
+            try:
+                videoQualityUrl =  sourcesArray[2]
+                keepCycleAlive = False
+            except:
+                print("\nQuality unavailable! Try another one!")
+                keepCycleAlive = True
+        elif selectedOptionQuality == 4:
+            try:
+                videoQualityUrl =  sourcesArray[3]
+                keepCycleAlive = False
+            except:
+                print("\nQuality unavailable! Try another one!")
+                keepCycleAlive = True
+        elif selectedOptionQuality == 5:
+            try:
+                videoQualityUrl =  sourcesArray[4]
+                keepCycleAlive = False
+            except:
+                print("\nQuality unavailable! Try another one!")
+                keepCycleAlive = True
+        else:
+            print("\nUnavaiable option. Try again!")
+            
+        # If the selected option wasn't available, let user choose another one
+        if keepCycleAlive:
+            selectedOptionQuality = showDownloadOptions()
+            
+    ###############################################
+    # DOWNLOAD THE FILE BASED ON THE URL CHOOSEN
+    ###############################################
+    now = datetime.now() # Retrieve current date and time
+    year = now.strftime("%Y") # Get current year
+    month = now.strftime("%m") # Get current month
+    day = now.strftime("%d") # Get current day
+    time = now.strftime("%H-%M-%S") # Get current time
+    # Build the filename
+    generatedFileName = 'video-ts-fragments-' + year + '-' + month + '-' + day + '-' + time
+    
+    print("\nDownloading the file...")
+    r = requests.get(videoQualityUrl) # Download the file
+    with open(generatedFileName, 'wb') as f:
+        print("\nWriting the file to current directory...")
+        f.write(r.content) # Write the file
+
+    # Make file name attribution
+    tsFileName = generatedFileName
+    
+    del keepCycleAlive, now, year, month, day, time, generatedFileName
+
+#############################
+# PICK TS FILE
+#############################
+if selectedOption == 2:
+    root = tk.Tk()
+    root.withdraw()
+    file_path = filedialog.askopenfilename() # Get the file path with the file dialog
+    filePathComponents = file_path.split('/', -1) # Split the file path by delimiter
+    tsFileName = filePathComponents[-1] # Select the part that corresponds to the file name
+    print('\nLinks file selected!')
+
+#############################
+# MAIN
+#############################
 # Create CSV file
 try:
     fileCopyName = tsFileName + '-copy'
     fileRenameName = tsFileName + '-csv.csv'
     cpFile(tsFileName, fileCopyName) # Make a copy of the original file
     os.rename(fileCopyName, fileRenameName) # Rename the copy of the original file
-    print('CSV file created!\n')
+    print('\nCSV file created!\n')
 except:
     print('CSV file already created!\n')
 
@@ -92,7 +236,7 @@ for videoNumber, downloadLink in enumerate(links):
         file.write(chunk) # Put the data into the file
     file.close() # Close the file
     
-    time.sleep(1) # Sleep for 1 second to make sure the server is not rate-limiting the connection
+    timeLib.sleep(1) # Sleep for 1 second to make sure the server is not rate-limiting the connection
 
 print ("\n-----Download complete!-----\n")
 
