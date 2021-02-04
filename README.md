@@ -36,7 +36,3 @@ FUTURE UPGRADES:
 - Skip the already downloaded video files in case of a program crash
 - Delete merged video if the program crashes while merging it
 - Create GUI program based on the same code
-______________________
-NOTES:
-
-- This python script was created to download .ts files from Dark.Video
