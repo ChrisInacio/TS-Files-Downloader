@@ -14,8 +14,8 @@ import csv
 # Collection of complex mathematical operations suitable for processing statistical data
 import numpy as np
 # Libraries to combine multiple mp4 files
-from moviepy.editor import *
-from natsort import natsorted
+# from moviepy.editor import *
+from moviepy.editor import VideoFileClip, concatenate_videoclips
 # Libraries to open file pick dialog
 import tkinter as tk
 from tkinter import filedialog
@@ -208,7 +208,7 @@ for arrayIndex, indexContent in enumerate(linksArray):
         links.append(contentStr) # save link to string array
 
 # Folder name created where the current .py file is located
-videoFolderName = "Media"
+videoFolderName = "Media-" + tsFileName
 
 # Check the directory folder exists before creating a new one
 if not(os.path.isdir(videoFolderName)):
@@ -240,19 +240,26 @@ for videoNumber, downloadLink in enumerate(links):
 
 print ("\n-----Download complete!-----\n")
 
-# Combine all videos into a single video file
-L =[]
-for root, dirs, files in os.walk(os.path.dirname(os.path.realpath(__file__))): 
-    files = natsorted(files)
-    for file in files:
-            if os.path.splitext(file)[1] == '.mp4':
-                filePath = os.path.join(root, file)
-                video = VideoFileClip(filePath)
-                L.append(video)
-            
+# Combine all clips into a single video file
+L = []
+for root, dirs, files in os.walk("."):
+    for filename in files:
+        filePath = os.path.join(root, filename)
+        clip = VideoFileClip(filePath)
+        L.append(clip)
+        del clip
+       
 final_clip = concatenate_videoclips(L)
 outputFileName = r'output-' + str(tsFileName) + '.mp4'
-final_clip.to_videofile(outputFileName, fps=30, remove_temp=True)
+final_clip.write_videofile(outputFileName, fps=30, remove_temp=True)
+
+# Close the videos for efficiency
+final_clip.close()
+for x in range(len(L)):
+    L[x].close()
+    
+# Delete all the videos
+del L, root, dirs, files, final_clip, filePath, outputFileName
 
 # Delete AUX files
 print('\n-----Removing AUX video files!-----\n')
