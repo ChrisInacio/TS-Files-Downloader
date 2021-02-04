@@ -23,7 +23,8 @@ DOWNLOAD VIDEOS USING DARK.VIDEO LINKS
 1. Run the file run.bat
 2. Select the option to input link
 3. Input the video link
-4. Wait for the process to finish
+4. Select the video quality
+5. Wait for the process to finish
 ______________________
 OUTPUT FILES:
 
