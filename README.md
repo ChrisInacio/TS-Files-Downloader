@@ -26,11 +26,6 @@ OUTPUT FILES:
 - All the .ts files are converted to mp4 and grouped to a single video file
 - After the process finishes, all the auxiliary files will be removed automatically
 ______________________
-PROGRAM FAIL:
-
-- If the process fails during the video merge, you must delete the merged video
-and rerun the program.
-______________________
 FUTURE UPGRADES:
 
 - Skip the already downloaded video files in case of a program crash
