@@ -1,5 +1,6 @@
-# TS-Files-Downloader
+# TS Files Downloader
 Download multiple .ts files from URL's
+Can also be used to download videos from Dark.Video
 ______________________
 IMPLEMENTED UPGRADES:
 
