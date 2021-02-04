@@ -6,19 +6,24 @@ IMPLEMENTED UPGRADES:
 
 - Input Video URL and display available resolutions (download only selected resolution)
 ______________________
-GET THE LINKS FILE:
+DOWNLOAD VIDEOS USING TS LINKS FILE
 
 1. Open page source of  the video ( Ctrl + U )
 2. Search for "video-js" with the video-watch ID
 3. Choose the URL for a specific quality (ie. 1080p)
 4. Navigate to that URL and a file will be downloaded
 5. Place the file in the same folder as main.py
+6. Run the file run.bat
+7. Select the option to pick a file
+8. Pick the file you downloaded
+9. Wait for the process to finish
 ______________________
-RUN THE PROGRAM:
+DOWNLOAD VIDEOS USING DARK.VIDEO LINKS
 
-5. Run the file run.bat
-6. Pick the file you downloaded
-7. Wait for the process to finish
+1. Run the file run.bat
+2. Select the option to input link
+3. Input the video link
+4. Wait for the process to finish
 ______________________
 OUTPUT FILES:
 
