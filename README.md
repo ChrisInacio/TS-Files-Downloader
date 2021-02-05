@@ -4,7 +4,7 @@
 ______________________
 IMPLEMENTED UPGRADES:
 
-- Input Video URL and display available resolutions (download only selected resolution)
+- Input Video URL and display all possible resolutions (download only selected resolution)
 ______________________
 DOWNLOAD VIDEOS USING TS LINKS FILE
 
