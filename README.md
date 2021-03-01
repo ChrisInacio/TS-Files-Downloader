@@ -4,7 +4,7 @@
 
 ______________________
 ISSUES (WILL BE FIXED IN THE FUTURE)
-- Program will crash if the video being merged is too big. Issue is probably related to system memory since for 1 specific video sometimes it works, while other times it does not.
+- Program will crash if the video being merged is too big. Issue is probably related to system memory since for 1 specific video sometimes it works, while other times it does not. If this does happen, you might want to use TSSplitter to join all the MP4 files.
  
 ______________________
 DOWNLOAD VIDEOS USING TS LINKS FILE
