@@ -222,7 +222,7 @@ os.chdir(videoFolderName) # Change the current directory to that folder
 # Make sure the connection to the server stays open and configured and also persist cookies
 session = requests.Session()
 
-print ("-----Starting Download!-----\n")
+print ("-----Starting Download-----\n")
 
 # For loop will cycle through every link, downloading them and placing then in the  assigned folder
 for videoNumber, downloadLink in enumerate(links):
@@ -238,62 +238,71 @@ for videoNumber, downloadLink in enumerate(links):
     
     timeLib.sleep(1) # Sleep for 1 second to make sure the server is not rate-limiting the connection
 
-print("\n-----Download complete!-----\n")
+print("\n-----Download Complete-----\n")
 
 # Combine all clips into a single video file
-keepCycleAlive = True
-while keepCycleAlive:
-    try:
-        L = []
-        print('\nAttempting to combine videos')
-        for root, dirs, files in os.walk('.'):
-            for filename in files:
-                # Check if the filename starts with 'output' to discard any complete downloaded videos
-                if not(filename.startswith('output')):
-                    filePath = os.path.join(root, filename)
-                    clip = VideoFileClip(filePath)
-                    L.append(clip)
-                    print('.')
-                    del clip
-        keepCycleAlive = False
-    except:
-        print('\nError occurred while attempting to merging videos! Trying again...')
-       
-final_clip = concatenate_videoclips(L)
-outputFileName = r'output-' + str(tsFileName) + '.mp4'
-final_clip.write_videofile(outputFileName, fps=30, remove_temp=True)
+errorOccurred = False
+try:
+    L = []
+    print('Attempting to combine videos into single variable', end =" ")
+    for root, dirs, files in os.walk(os.getcwd()):
+        for filename in files:
+            # Check if the filename starts with 'output' to discard any complete downloaded videos
+            if not(filename.startswith('output')):
+                filePath = os.path.join(root, filename)
+                clip = VideoFileClip(filePath)
+                L.append(clip)
+                print('.', end =" ")
+                del clip
+    print('\nDone!')
+except:
+    errorOccurred = True
+    print('\nError occurred while attempting to merging videos!')
 
-# Close the videos for efficiency
-final_clip.close()
-for x in range(len(L)):
-    L[x].close()
+# If the videos were combined successfully then continue the program
+if (errorOccurred == False):
+    print("\n-----MoviePy Tool Launch-----\n")
+    
+    final_clip = concatenate_videoclips(L)
+    outputFileName = r'output-' + str(tsFileName) + '.mp4'
+    final_clip.write_videofile(outputFileName, fps=30, remove_temp=True)
+    
+    # Close the videos for efficiency
+    final_clip.close()
+    for x in range(len(L)):
+        L[x].close()
+    
+    # Delete all the videos
+    del L, root, dirs, files, final_clip, filePath, outputFileName
+    
+    # Delete AUX files
+    print('\n-----Removing AUX video files!-----\n')
+    for x in range(len(links)):
+        if x < 10:
+            videoToBeRemoved = r'000' + str(x) + '.mp4'
+        elif x >= 10 and x < 100:
+            videoToBeRemoved = r'00' + str(x) + '.mp4'
+        elif x >= 100 and x < 1000:
+            videoToBeRemoved = r'0' + str(x) + '.mp4'
+        elif x >= 1000:
+            videoToBeRemoved = str(x) + '.mp4'
+        print('Removing file: ', videoToBeRemoved)
+        os.remove(videoToBeRemoved)
+    print('\n-----Removing AUX links files!-----\n')
+    os.chdir(mainDirectory) # change to the current working directory
+    print('Removing file: ', fileRenameName)
+    os.remove(fileRenameName)
+    print('Removing file: ', tsFileName)
+    os.remove(tsFileName)
+    
+    # Delete unwanted variables
+    del arrayIndex, chunk, contentStr, csvfile, data, downloadLink, f, file, fileCopyName, fileName, fileRenameName, indexContent
+    del links, linksArray, r, req, selectedOption, selectedOptionQuality, session, sourcesArray, tsFileName
+    del videoFolderName, videoNumber, videoQualityUrl, videoToBeRemoved, x
 
-# Delete all the videos
-del L, root, dirs, files, final_clip, filePath, outputFileName
+    print('\n-----DONE!-----')
 
-# Delete AUX files
-print('\n-----Removing AUX video files!-----\n')
-for x in range(len(links)):
-    if x < 10:
-        videoToBeRemoved = r'000' + str(x) + '.mp4'
-    elif x >= 10 and x < 100:
-        videoToBeRemoved = r'00' + str(x) + '.mp4'
-    elif x >= 100 and x < 1000:
-        videoToBeRemoved = r'0' + str(x) + '.mp4'
-    elif x >= 1000:
-        videoToBeRemoved = str(x) + '.mp4'
-    print('Removing file: ', videoToBeRemoved)
-    os.remove(videoToBeRemoved)
-print('\n-----Removing AUX links files!-----\n')
-os.chdir(mainDirectory) # change to the current working directory
-print('Removing file: ', fileRenameName)
-os.remove(fileRenameName)
-print('Removing file: ', tsFileName)
-os.remove(tsFileName)
+else:
+    print('\nAn error occurrer when trying to merge the videos! Please try to use another software to merge the downloaded videos.')
 
-# Delete unwanted variables
-del arrayIndex, chunk, contentStr, csvfile, data, downloadLink, f, file, fileCopyName, fileName, fileRenameName, indexContent
-del links, linksArray, r, req, selectedOption, selectedOptionQuality, session, sourcesArray, tsFileName
-del videoFolderName, videoNumber, videoQualityUrl, videoToBeRemoved, x
-
-print('\n-----DONE!-----')
+print('\n-----End of Program-----')
