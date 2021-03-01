@@ -4,7 +4,7 @@
 ______________________
 IMPLEMENTED UPGRADES:
 
-- Input Video URL and display all possible resolutions (download only selected resolution)
+- Input Video URL and display available resolutions (download only selected resolution)
 ______________________
 DOWNLOAD VIDEOS USING TS LINKS FILE
 
@@ -28,12 +28,7 @@ DOWNLOAD VIDEOS USING DARK.VIDEO LINKS
 ______________________
 OUTPUT FILES:
 
-- The downloaded file will be on the media folder
+- The downloaded file will be on the 'Downloads' folder
 - All the .ts files are converted to mp4 and grouped to a single video file
 - After the process finishes, all the auxiliary files will be removed automatically
-______________________
-FUTURE UPGRADES:
-
-- Skip the already downloaded video files in case of a program crash
-- Delete merged video if the program crashes while merging it
-- Create GUI program based on the same code
+- The video name will be based on a timestamp, so any video downloaded will always have a different name
