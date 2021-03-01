@@ -2,10 +2,6 @@
 - Download multiple .ts files from URL's
 - Can also be used to download videos from Dark.Video
 ______________________
-IMPLEMENTED UPGRADES:
-
-- Input Video URL and display available resolutions (download only selected resolution)
-______________________
 DOWNLOAD VIDEOS USING TS LINKS FILE
 
 1. Open page source of  the video ( Ctrl + U )
