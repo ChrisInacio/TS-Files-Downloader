@@ -40,7 +40,7 @@ def showMenu():
     print ("1) Video URL (only works for Dark.Video)")
     print ("2) Select a file")
     print ("3) Exit")
-    data=int(input("Enter your choice: "))
+    data = int(input("Enter your choice: "))
     return data
 
 def showDownloadOptions():
@@ -50,7 +50,7 @@ def showDownloadOptions():
     print ("3) 480p")
     print ("4) 720p")
     print ("5) 1080p")
-    data=int(input("Enter your choice: "))
+    data = int(input("Enter your choice: "))
     return data
 
 #############################
@@ -61,7 +61,7 @@ keepCycleAlive = True
 while keepCycleAlive:
     if selectedOption == 1:
         keepCycleAlive = False
-        videoUrl = str(input("Paste your URL here: "))
+        videoUrl = str(input("\nPaste your URL here: "))
     elif selectedOption == 2:
         keepCycleAlive = False
         print("\nOpening file dialog...")
@@ -208,14 +208,14 @@ for arrayIndex, indexContent in enumerate(linksArray):
         links.append(contentStr) # save link to string array
 
 # Folder name created where the current .py file is located
-videoFolderName = "Media-" + tsFileName
+videoFolderName = "Downloads"
 
 # Check the directory folder exists before creating a new one
 if not(os.path.isdir(videoFolderName)):
     os.makedirs(videoFolderName) # Create a folder to download the files into
-    print('Creating download folder!\n')
+    print('Creating downloads folder!\n')
 else:
-    print('Folder already created!\n')
+    print('Downloads folder already created!\n')
 
 os.chdir(videoFolderName) # Change the current directory to that folder
 
@@ -238,16 +238,26 @@ for videoNumber, downloadLink in enumerate(links):
     
     timeLib.sleep(1) # Sleep for 1 second to make sure the server is not rate-limiting the connection
 
-print ("\n-----Download complete!-----\n")
+print("\n-----Download complete!-----\n")
 
 # Combine all clips into a single video file
-L = []
-for root, dirs, files in os.walk("."):
-    for filename in files:
-        filePath = os.path.join(root, filename)
-        clip = VideoFileClip(filePath)
-        L.append(clip)
-        del clip
+keepCycleAlive = True
+while keepCycleAlive:
+    try:
+        L = []
+        print('\nAttempting to combine videos')
+        for root, dirs, files in os.walk('.'):
+            for filename in files:
+                # Check if the filename starts with 'output' to discard any complete downloaded videos
+                if not(filename.startswith('output')):
+                    filePath = os.path.join(root, filename)
+                    clip = VideoFileClip(filePath)
+                    L.append(clip)
+                    print('.')
+                    del clip
+        keepCycleAlive = False
+    except:
+        print('\nError occurred while attempting to merging videos! Trying again...')
        
 final_clip = concatenate_videoclips(L)
 outputFileName = r'output-' + str(tsFileName) + '.mp4'
@@ -257,7 +267,7 @@ final_clip.write_videofile(outputFileName, fps=30, remove_temp=True)
 final_clip.close()
 for x in range(len(L)):
     L[x].close()
-    
+
 # Delete all the videos
 del L, root, dirs, files, final_clip, filePath, outputFileName
 
@@ -278,5 +288,12 @@ print('\n-----Removing AUX links files!-----\n')
 os.chdir(mainDirectory) # change to the current working directory
 print('Removing file: ', fileRenameName)
 os.remove(fileRenameName)
+print('Removing file: ', tsFileName)
+os.remove(tsFileName)
+
+# Delete unwanted variables
+del arrayIndex, chunk, contentStr, csvfile, data, downloadLink, f, file, fileCopyName, fileName, fileRenameName, indexContent
+del links, linksArray, r, req, selectedOption, selectedOptionQuality, session, sourcesArray, tsFileName
+del videoFolderName, videoNumber, videoQualityUrl, videoToBeRemoved, x
 
 print('\n-----DONE!-----')
