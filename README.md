@@ -1,6 +1,11 @@
 # TS Files Downloader
 - Download multiple .ts files from URL's
 - Can also be used to download videos from Dark.Video
+
+______________________
+ISSUES (WILL BE FIXED IN THE FUTURE)
+- Program will crash if the video being merged is too big. Issue is probably related to system memory since for 1 specific video sometimes it works, while other times it does not.
+ 
 ______________________
 DOWNLOAD VIDEOS USING TS LINKS FILE
 
