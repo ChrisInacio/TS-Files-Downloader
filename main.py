@@ -295,6 +295,8 @@ if (errorOccurred == False):
     print('Removing file: ', tsFileName)
     os.remove(tsFileName)
     
+    os.startfile(videoFolderName) # Open the Downloads folder
+    
     # Delete unwanted variables
     del arrayIndex, chunk, contentStr, csvfile, data, downloadLink, f, file, fileCopyName, fileName, fileRenameName, indexContent
     del links, linksArray, r, req, selectedOption, selectedOptionQuality, session, sourcesArray, tsFileName
